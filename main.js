@@ -29,14 +29,12 @@ const closeIssue = id => {
   currentIssue.status = 'Closed';
   localStorage.setItem('issues', JSON.stringify(issues));
   fetchIssues();
-  
 }
 
 const deleteIssue = id => {
   const issues = JSON.parse(localStorage.getItem('issues'));
   // bug fixed in the remainingIssue. bug was in 'not-equal' sign and not defining the function inside filter. then there is no fetchIssue function calling.
   const remainingIssues = issues.filter(issue => issue.id != id);
-  console.log(remainingIssues);
   localStorage.setItem('issues', JSON.stringify(remainingIssues));
   fetchIssues();
 }
@@ -48,7 +46,6 @@ const fetchIssues = () => {
 
   for (var i = 0; i < issues.length; i++) {
     const {id, description, severity, assignedTo, status} = issues[i];
-
     issuesList.innerHTML +=   `<div class="well">
                               <h6>Issue ID: ${id} </h6>
                               <p><span class="label label-info"> ${status} </span></p>
@@ -59,4 +56,12 @@ const fetchIssues = () => {
                               <a href="#" onclick="deleteIssue(${id})" class="btn btn-danger">Delete</a>
                               </div>`;
   }
+  const totalIssue = document.getElementById('total-issue');
+  totalIssue.innerText = issues.length;
+  const openIssue = issues.filter(issue => issue.status == 'Open');
+  const openIssueCounter = document.getElementById('open-issue');
+  openIssueCounter.innerText = openIssue.length;
+  const closedIssue = issues.filter(issue => issue.status == 'Closed');
+  const closeIssueCounter = document.getElementById('closed-issue');
+  closeIssueCounter.innerText = closedIssue.length;
 }
